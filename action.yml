@@ -1,0 +1,54 @@
+name: '🏗 Create a PR updating a python library of a repository'
+description: ''
+inputs:
+  library:  
+    description: 'The name of the library'
+    required: true
+  new_version:  
+    description: 'The new version to update to'
+    required: true
+  repository:
+    description: 'The repository full name where to create the PR'
+    required: true
+  branch:
+    description: 'The branch where to create the PR to'
+    required: true
+  python_version:
+    description: 'The python version used on the repository'
+    required: true
+  # github_token:
+  #   description: 'Github token'
+  #   required: true
+
+runs:
+
+  using: "composite"
+
+  steps:
+  
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        repository: ${{ inputs.repository }}
+
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ inputs.python_version }}
+
+    - name: Update library
+      shell: bash
+      run: |
+        poetry update ${{ inputs.library }}==${{ inputs.new_version }}
+      
+    - name: Create pull request
+      uses: peter-evans/create-pull-request@v3
+      with:
+        branch: 'update-${{ inputs.library }}-to-${{ inputs.new_version }}'
+        commit-message: 'Update ${{ inputs.library }} to ${{ inputs.new_version }} version'
+        title: 'Update ${{ inputs.library }} to ${{ inputs.new_version }} version'
+        body: 'This PR updates the ${{ inputs.library }} to ${{ inputs.new_version }} version.'
+        base: ${{ inputs.branch }}
+
+
+    
