@@ -35,7 +35,6 @@ runs:
       uses: actions/setup-python@v4
       with:
         python-version: ${{ inputs.python_version }}
-        cache: 'poetry'
 
     - name: Setup Poetry
       uses: snok/install-poetry@v1
