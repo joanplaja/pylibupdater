@@ -25,8 +25,11 @@ To enable your GitHub Actions workflow to create pull requests, you need to expl
 Here's how you can do it:
 
 Go to the "Settings" tab of your repository on GitHub.
+
 Click on "Actions" in the left sidebar.
+
 Under "General", find the "Workflow permissions" section.
+
 Ensure that "Allow GitHub Actions to create pull requests" is selected.
 
 If your repository belongs to an organization, you can manage these settings in the organization's settings under "Actions" → "General" → "Workflow permissions". Organization admins can grant these permissions to allow workflows in all repositories belonging to the organization to create pull requests.
@@ -41,6 +44,7 @@ If your repository belongs to an organization, you can manage these settings in 
     repository: 'joanplaja/django-poetry-example'
     branch: 'master'
     python_version: '3.8'
+    token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ## Release procedure

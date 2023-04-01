@@ -24,3 +24,4 @@ jobs:
           repository: 'joanplaja/django-poetry-example'
           branch: 'master'
           python_version: '3.8'
+          token: ${{ secrets.GITHUB_TOKEN }}
