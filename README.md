@@ -25,7 +25,11 @@ This action is easy to integrate into your existing workflows, and can be custom
   id: pylibupdater
   uses: joanplaja/pylibupdater
   with:
-    library: 'test'
+    library: 'black'
+    new_version: '23.3.0'
+    repository: 'joanplaja/django-poetry-example'
+    branch: 'master'
+    python_version: '3.8'
 ```
 
 ## Release procedure
