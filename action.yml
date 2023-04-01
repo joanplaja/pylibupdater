@@ -38,7 +38,7 @@ runs:
         cache: 'poetry'
 
     - name: Setup Poetry
-      uses: robertbeal/setup-poetry@v1
+      uses: snok/install-poetry@v1
 
     - name: Update library
       shell: bash
