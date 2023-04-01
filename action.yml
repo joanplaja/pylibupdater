@@ -37,6 +37,9 @@ runs:
         python-version: ${{ inputs.python_version }}
         cache: 'poetry'
 
+    - name: Setup Poetry
+      uses: robertbeal/setup-poetry@v1
+
     - name: Update library
       shell: bash
       run: |
