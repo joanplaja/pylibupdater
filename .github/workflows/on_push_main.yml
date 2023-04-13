@@ -19,8 +19,8 @@ jobs:
         id: pylibupdater
         uses: joanplaja/pylibupdater@v0
         with:
-          library: 'black'
-          new_version: '23.3.0'
+          library: 'django'
+          new_version: '4.2'
           repository: 'joanplaja/django-poetry-example'
           branch: 'master'
           python_version: '3.8'
