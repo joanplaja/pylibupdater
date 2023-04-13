@@ -37,14 +37,14 @@ If your repository belongs to an organization, you can manage these settings in 
 ```
 - name: 🏗 Update python library and create PR
   id: pylibupdater
-  uses: joanplaja/pylibupdater
+  uses: joanplaja/pylibupdater@v0
   with:
     library: 'black'
     new_version: '23.3.0'
     repository: 'joanplaja/django-poetry-example'
     branch: 'master'
     python_version: '3.8'
-    token: ${{ secrets.GITHUB_TOKEN }}
+    pat: ${{ secrets.PAT }}
 ```
 
 ## Release procedure
