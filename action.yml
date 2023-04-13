@@ -16,9 +16,9 @@ inputs:
   python_version:
     description: 'The python version used on the repository'
     required: true
-  # github_token:
-  #   description: 'Github token'
-  #   required: true
+  github_token:
+    description: 'Github token'
+    required: true
 
 runs:
 
@@ -47,6 +47,7 @@ runs:
     - name: Create pull request
       uses: peter-evans/create-pull-request@v3
       with:
+        token: ${{ inputs.github_token }}
         branch: 'update-${{ inputs.library }}-to-${{ inputs.new_version }}'
         commit-message: 'Update ${{ inputs.library }} to ${{ inputs.new_version }} version'
         title: 'Update ${{ inputs.library }} to ${{ inputs.new_version }} version'
