@@ -42,7 +42,8 @@ runs:
     - name: Update library
       shell: bash
       run: |
-        poetry update ${{ inputs.library }}==${{ inputs.new_version }}
+        poetry remove ${{ inputs.library }}
+        poetry add ${{ inputs.library }}==${{ inputs.new_version }}
       
     - name: Create pull request
       uses: peter-evans/create-pull-request@v3
