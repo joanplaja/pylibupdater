@@ -23,6 +23,10 @@ inputs:
     description: 'SSH key to pull libraries'
     required: false
     default: ''
+  ssh_library_url:
+    description: 'SSH url from the library to pull'
+    required: false
+    default: ''
 
 runs:
 
@@ -50,10 +54,18 @@ runs:
         ssh-private-key: ${{ inputs.ssh_private_key }}
 
     - name: Update library
+      if: ${{ inputs.ssh_private_key == '' }}
       shell: bash
       run: |
         poetry remove ${{ inputs.library }}
         poetry add ${{ inputs.library }}==${{ inputs.new_version }}
+    
+    - name: Update SSH library
+      if: ${{ inputs.ssh_private_key != '' }}
+      shell: bash
+      run: |
+        poetry remove ${{ inputs.library }}
+        poetry add ${{ inputs.ssh_library_url }}
       
     - name: Create pull request
       uses: peter-evans/create-pull-request@v3
