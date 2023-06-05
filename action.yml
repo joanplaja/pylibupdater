@@ -19,6 +19,10 @@ inputs:
   pat:
     description: 'Github Personal token REPO scope'
     required: true
+  ssh_private_key:
+    description: 'SSH key to pull libraries'
+    required: false
+    default: ''
 
 runs:
 
@@ -38,6 +42,12 @@ runs:
 
     - name: Setup Poetry
       uses: snok/install-poetry@v1
+
+    - name: Prepare SSH Key
+      if: ${{ inputs.ssh_private_key != '' }}
+      uses: webfactory/ssh-agent@v0.5.4
+      with:
+        ssh-private-key: ${{ inputs.ssh_private_key }}
 
     - name: Update library
       shell: bash
