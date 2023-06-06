@@ -7,44 +7,88 @@
 
 Introducing the "Python Library Updater" Github Action, the ultimate tool for managing your Python libraries across multiple repositories. This action is specifically designed to streamline the process of updating your Python libraries to their latest version, making it easy for you to maintain consistency across all your repositories.
 
-To use this action, you need to have the "poetry" package manager installed in your repository. With "Python Library Updater" you can automatically check for updates to your Python libraries and push those updates to all your repositories, saving you valuable time and effort. Whether you're managing a large or small set of repositories, this action provides a simple and efficient way to ensure that your Python libraries are always up to date.
-
-This action is easy to integrate into your existing workflows, and can be customized to fit your specific needs. Say goodbye to the hassle of manual updates and embrace the power of "Python Library Updater" for your next library.
-
 
 ## Table of Contents
 
 - [Table of Contents](#table-of-contents)
+- [Parameters](#parameters)
+- [Requirements](#requirements)
 - [Usage](#usage)
 - [Release procedure](#release-procedure)
 
+## Parameters
+
+| Parameter       | Description                                                | Required |
+|-----------------|------------------------------------------------------------|----------|
+| library         | The name of the library                                    | true     |
+| new_version     | The new version to update to                               | true     |
+| repository      | The repository full name where to create the PR            | true     |
+| branch          | The branch where to create the PR to                        | true     |
+| python_version  | The python version used on the repository                  | true     |
+| pat             | Github Personal token REPO scope                           | true     |
+| ssh_private_key | SSH key to pull libraries                                  | false    |
+| ssh_library_url | SSH url from the library to pull                           | false    |
+
+
+
+
+## Requirements
+
+1. PAT: You need to create a PAT (Personal Access Token) with the following permissions:
+    - repo: Full control of private repositories
+    - workflow: Read and write access to actions, workflows, and related artifacts.
+2. ( Optionally ) SSH_PRIVATE_KEY:  If you want to use SSH to install the libraries, you need to create a SSH key and add it to your Github Account or repository secrets.
+
 ## Usage
 
-To enable your GitHub Actions workflow to create pull requests, you need to explicitly grant the necessary permissions in your repository's settings.
+This action is designed to be used in a workflow triggered by a tag push. The tag name will be used as the new version of the library. The action will then update the version of the library in the `pyproject.toml` file and create a PR with the changes. 
 
-Here's how you can do it:
+```yaml
+name: On push version
 
-Go to the "Settings" tab of your repository on GitHub.
+on:
+  push:
+    tags: # If you only want to trigger the worklfow only with the minor tags (v1.0, v1.1, v1.2) and not majors (v0, v1, v2) you can use the following regex
+      - 'v[0-9]+.[0-9]+'
 
-Click on "Actions" in the left sidebar.
+jobs:
+  format:
+    name: Update test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        repositories:
+          - name: 'joanplaja/django-poetry-example'
+            python_version: '3.8'
+            branch: 'master'
 
-Under "General", find the "Workflow permissions" section.
+    steps:
+      # The tag abstraction logic it's outside the action, because it's not related to the action itself.
+      - name: Get tag
+        id: set-tag
+        run: |
+          REF="${{ github.event.ref }}"
+          echo "Original ref: $REF"
 
-Ensure that "Allow GitHub Actions to create pull requests" is selected.
+          # Remove prefix
+          TAG="${REF/refs\/tags\//}"
+          echo "Modified ref: $TAG"
 
-If your repository belongs to an organization, you can manage these settings in the organization's settings under "Actions" → "General" → "Workflow permissions". Organization admins can grant these permissions to allow workflows in all repositories belonging to the organization to create pull requests.
+          # Set modified ref as an output
+          echo "::set-output name=tag::$TAG"
 
-```
-- name: 🏗 Update python library and create PR
-  id: pylibupdater
-  uses: joanplaja/pylibupdater@v0
-  with:
-    library: 'black'
-    new_version: '23.3.0'
-    repository: 'joanplaja/django-poetry-example'
-    branch: 'master'
-    python_version: '3.8'
-    pat: ${{ secrets.PAT }}
+      - name: 🏗 Update python library and create PR
+        id: pylibupdater
+        uses: joanplaja/pylibupdater@v0
+        with:
+          library: 'python_library_example'
+          new_version: ${{ steps.set-tag.outputs.tag }}
+          repository: ${{ matrix.repositories.name }}
+          branch: ${{ matrix.repositories.branch }}
+          python_version: ${{ matrix.repositories.python_version }}
+          pat: ${{ secrets.PAT }}
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh_library_url: git+ssh://git@github.com/joanplaja/python_library_example@${{ steps.set-tag.outputs.tag }}
 ```
 
 ## Release procedure
