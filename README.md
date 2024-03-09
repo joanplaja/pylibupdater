@@ -41,6 +41,14 @@ Introducing the "Python Library Updater" Github Action, the ultimate tool for ma
 
 ## Usage
 
+Python library using it:
+
+[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=joanplaja&repo=python_library_example)](https://github.com/joanplaja/python_library_example)
+
+Django application using the below library:
+
+[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=joanplaja&repo=django-poetry-example)](https://github.com/joanplaja/django-poetry-example)
+
 This action is designed to be used in a workflow triggered by a tag push. The tag name will be used as the new version of the library. The action will then update the version of the library in the `pyproject.toml` file and create a PR with the changes. 
 
 ```yaml
