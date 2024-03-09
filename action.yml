@@ -1,5 +1,5 @@
 name: '🏗 Create a PR updating a python library of a repository'
-description: 'Introducing the "Python Library Updater" Github Action, the ultimate tool for managing your Python libraries across multiple repositories.'
+description: 'Tool for managing your Python libraries across multiple repositories.'
 icon: 'box'
 color: 'yellow'
 inputs:
